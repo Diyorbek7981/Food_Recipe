@@ -141,9 +141,10 @@ class UserConfirmation(models.Model):
     # - yani user = verify_codesni barcha codlariga
     expiration_time = models.DateTimeField(null=True)
     is_confirmed = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ['-created_time']
+        ordering = ['-created_at']
 
     def __str__(self):
         return str(self.user)
