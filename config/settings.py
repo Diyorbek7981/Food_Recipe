@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
     'userapp',
-    'drf_yasg',
+    'recipesapp',
+    'drf_yasg2',
     'rest_framework.authtoken',
 ]
 
@@ -135,7 +136,6 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
     ],
-    # royhatdan otmasa sayt ishlamasligi un
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ]
