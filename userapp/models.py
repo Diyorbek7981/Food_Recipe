@@ -4,7 +4,6 @@ import random
 import uuid  # takrorlanishlar ehtimoli kam
 from django.core.validators import FileExtensionValidator, MaxLengthValidator
 from datetime import datetime, timedelta
-
 from rest_framework_simplejwt.tokens import RefreshToken
 
 # Users uchun--------------------------------->
@@ -32,12 +31,6 @@ class Users(AbstractUser):
         ('Male', 'male',),
         ('Female', 'female')
     )
-    COOKING_LEVEL = (
-        ('Novice', 'Novice'),
-        ('Intermediate', 'Intermediate'),
-        ('Advanced', 'Advanced'),
-        ('Expert', 'Expert')
-    )
 
     auth_type = models.CharField(max_length=31,
                                  choices=AUTH_TYPE_CHOICES)
@@ -50,7 +43,9 @@ class Users(AbstractUser):
     date_of_birth = models.DateField(null=True, blank=True)
     followers = models.ManyToManyField('self', related_name='followers')
     following = models.ManyToManyField('self', related_name='following')
-    cooking_level = models.CharField(max_length=20, choices=COOKING_LEVEL)
+    cooking_level = models.CharField(max_length=50, null=True, blank=True)
+    cuisines = models.ManyToManyField('CuisinesModel', related_name='cuisines', default=None)
+    dietary = models.ManyToManyField('DietaryModel', related_name='cuisines', default=None)
     instagram = models.URLField(null=True, blank=True)
     youtube = models.URLField(null=True, blank=True)
     telegram = models.URLField(null=True, blank=True)
@@ -124,6 +119,26 @@ class Users(AbstractUser):
         self.hashing_password()
 
 
+class CuisinesModel(models.Model):
+    name = models.CharField(max_length=120)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+
+
+class DietaryModel(models.Model):
+    name = models.CharField(max_length=120)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+
+
 PHONE_EXPIRE = 2
 EMAIL_EXPIRE = 5
 
@@ -151,7 +166,7 @@ class UserConfirmation(models.Model):
 
     # yaratilgan codni yaroqlilik muddatini belgilaydi
     def save(self, *args, **kwargs):
-        if self.verify_type == VIA_EMAIL:  # 30-mart 11-33 + 5minutes
+        if self.verify_type == VIA_EMAIL:
             self.expiration_time = datetime.now() + timedelta(minutes=EMAIL_EXPIRE)
         else:
             self.expiration_time = datetime.now() + timedelta(minutes=PHONE_EXPIRE)

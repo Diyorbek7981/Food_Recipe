@@ -10,27 +10,32 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 import os
+from dotenv import dotenv_values
 from datetime import timedelta
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+ENV = dotenv_values(os.path.join(BASE_DIR, ".env"))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-vt6lw#kfcux=mctded$t*z^d^h79ho7^o(=_6qbe^9+=d3&q-3'
+SECRET_KEY = ENV.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
+CORS_ALLOW_ALL_ORIGINS = True
+CSRF_TRUSTED_ORIGINS = ['https://coocypediya.salikhdev.uz']
 
 # Application definition
 
 INSTALLED_APPS = [
     'jazzmin',
+    'modeltranslation',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -43,11 +48,13 @@ INSTALLED_APPS = [
     'userapp',
     'drf_yasg',
     'rest_framework.authtoken',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -106,7 +113,19 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LOCALE_PATHS = [
+    BASE_DIR / 'locale'
+]
+
+LANGUAGES = (
+    ('uz', 'Uzbek'),
+    ('ru', 'Russian')
+)
+
+MODELTRANSLATION_DEFAULT_LANGUAGE = 'uz'
+MODELTRANSLATION_LANGUAGES = ('uz', 'ru')
+
+LANGUAGE_CODE = 'uz-us'
 
 TIME_ZONE = 'Asia/Tashkent'
 
@@ -180,3 +199,5 @@ SIMPLE_JWT = {
     "SLIDING_TOKEN_OBTAIN_SERIALIZER": "rest_frameish_simplejvt.serializatorlar.TokenObtainSlidingSerializer",
     "SLIDING_TOKEN_REFRESH_SERIALIZER": "rest_frameish_simplejvt.serializatorlar.TokenRefreshSlidingSerializer",
 }
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # Emilga boradigan verifikatsiya codini konsolga yuboradi (emailga jo'natish u-n obuna sotib olish kerak)

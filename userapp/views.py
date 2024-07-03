@@ -26,7 +26,8 @@ from rest_framework_simplejwt.exceptions import TokenError
 from django.core.exceptions import ObjectDoesNotExist
 from .utility import send_email, send_phone_code, check_email_or_phone
 from rest_framework.exceptions import ValidationError, NotFound
-import datetime
+from datetime import datetime
+
 
 
 # Create your views here.
@@ -87,7 +88,8 @@ class GetNewVerification(APIView):
 
         if user.auth_type == VIA_PHONE:
             code = user.create_verify_code(VIA_PHONE)
-            send_phone_code(user.phone_number, code)
+            send_email(user.email, code)
+            # send_phone_code(user.phone_number, code)
         else:
             data = {
                 "message": "Email yoki telefon raqami noto'g'ri"

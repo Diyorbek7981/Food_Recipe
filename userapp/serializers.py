@@ -36,6 +36,7 @@ class SignUpSerializer(serializers.ModelSerializer):
 
         if user.auth_type == VIA_PHONE:
             code = user.create_verify_code(VIA_PHONE)
+            # send_email(user.email, code)
             send_phone_code(user.phone_number, code)
         user.save()
         return user
@@ -67,7 +68,7 @@ class SignUpSerializer(serializers.ModelSerializer):
 
     # email va phone takrorlanmasligi uchun validation ---------------------->
 
-    def validate_email_phone_number(self, value):
+    def validate_phone_number(self, value):
         value = value.lower()
 
         if value and Users.objects.filter(phone_number=value).exists():

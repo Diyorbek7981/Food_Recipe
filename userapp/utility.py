@@ -6,6 +6,8 @@ from django.template.loader import render_to_string
 from rest_framework.exceptions import ValidationError
 from twilio.rest import Client
 from django.conf import settings
+import smtplib
+import vonage
 
 # email yoki telefon raqamiga tekshiradi ------------------------>
 
@@ -53,43 +55,25 @@ def check_user_type(user_input):
     return user_input
 
 
-# emailga codni jo'natish uchun html orqali emailiga yuborish uchun ----------->
-class EmailThread(threading.Thread):
-
-    def __init__(self, email):
-        self.email = email
-        threading.Thread.__init__(self)
-
-    def run(self):
-        self.email.send()
-
-
-class Email:
-    @staticmethod
-    def send_email(data):
-        email = EmailMessage(
-            subject=data['subject'],
-            body=data['body'],
-            to=[data['to_email']]
-        )
-        if data.get('content_type') == "html":
-            email.content_subtype = 'html'
-        EmailThread(email).start()
-
-
+# ---------------------------------------------------------- Emailga code jo'natish
 def send_email(email, code):
-    html_content = render_to_string(
-        'email/authentication/acticate_account.html',
-        {"code": code}
-    )
-    Email.send_email(
-        {
-            "subject": "Royhatdan otish",
-            "to_email": email,
-            "body": html_content,
-            "content_type": "html"
-        }
-    )
+    # creates SMTP session
+    s = smtplib.SMTP('smtp.gmail.com', 587)
+    # start TLS for security
+    s.starttls()
+    # Authentication
+    # s.login('email', "password")
+    s.login('abdumalikovislombek39@gmail.com', "gexe vqkl cdjt wdaa")
+    # message to be sent
+    subject = 'Salom do`stim! Sizning tasdiqlash kodingiz:'
+    body = code
+
+    message = f'Subject: {subject}\n\n{body}'
+    # sending the mail
+
+    s.sendmail("abdurahimov.diyorbek7981@gmail.com", f"{email}", message)
+    # terminating the session
+    s.quit()
 
 
 # --------------------------------------------------------------------------------
@@ -98,11 +82,26 @@ def send_email(email, code):
 
 
 def send_phone_code(phone, code):
-    account_sid = settings.TWILIO_ACCOUNT_SID
-    auth_token = settings.TWILIO_AUTH_TOKEN
-    client = Client(account_sid, auth_token)
-    client.messages.create(
-        body=f"Salom do'stim! Sizning tasdiqlash kodingiz: {code}\n",
-        from_="+15612993508",  # twiliodagi raqam
-        to=f"{phone}"
+    # account_sid = settings.TWILIO_ACCOUNT_SID
+    # auth_token = settings.TWILIO_AUTH_TOKEN
+    # client = Client(account_sid, auth_token)
+    # client.messages.create(
+    #     body=f"Salom do'stim! Sizning tasdiqlash kodingiz: {code}\n",
+    #     from_="+15612993508",  # twiliodagi raqam
+    #     to=f"{phone}"
+    # )
+
+    client = vonage.Client(key="3c60d33a", secret="j86gYfqwcMkipXhu")
+    sms = vonage.Sms(client)
+    responseData = sms.send_message(
+        {
+            "from": "Vonage APIs",
+            "to": f"{phone}",
+            "text": f"Hello Diyorber {code}",
+        }
     )
+
+    if responseData["messages"][0]["status"] == "0":
+        print("Message sent successfully.")
+    else:
+        print(f"Message failed with error: {responseData['messages'][0]['error-text']}")
