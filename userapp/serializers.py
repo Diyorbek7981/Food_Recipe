@@ -254,7 +254,7 @@ class LoginSerializer(TokenObtainPairSerializer):
 
     def validate(self, data):  # userni inputini va statusini tekshirib malumotga data qaytaradi
         self.auth_validate(data)
-        if self.user.auth_status not in [DONE, PHOTO_DONE]:
+        if self.user.auth_status in [NEW, CODE_VERIFIED]:
             raise PermissionDenied("Siz login qila olmaysiz. Ruxsatingiz yoq")
         data = self.user.token()
         data['auth_status'] = self.user.auth_status
@@ -365,3 +365,9 @@ class UpdatePhoneNumberSerializer(serializers.Serializer):
             raise ValidationError(data)
 
         return value
+
+
+class CodeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserConfirmation
+        fields = '__all__'

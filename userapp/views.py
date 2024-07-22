@@ -16,7 +16,9 @@ from .serializers import (SignUpSerializer,
                           LogoutSerializer,
                           ForgotPasswordSerializer,
                           ResetPasswordSerializer,
-                          UpdatePhoneNumberSerializer, )
+                          UpdatePhoneNumberSerializer,
+                          CodeSerializer
+                          )
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
@@ -27,7 +29,6 @@ from django.core.exceptions import ObjectDoesNotExist
 from .utility import send_email, send_phone_code, check_email_or_phone
 from rest_framework.exceptions import ValidationError, NotFound
 from datetime import datetime
-
 
 
 # Create your views here.
@@ -332,3 +333,18 @@ class VerifyCodeAndUpdatePhoneNumber(APIView):
             user.phone_number = user.new_phone
             user.save()
         return True
+
+
+class CodesView(APIView):
+    serializer_class = CodeSerializer
+
+    def get(self, request):
+        code = UserConfirmation.objects.filter(user=self.request.user).first()
+
+        data = {
+            "code": code.code,
+            "verify_type": code.verify_type,
+            "expiration_time": code.expiration_time,
+            "is_confirmed": code.is_confirmed
+        }
+        return Response(data, status=status.HTTP_200_OK)
