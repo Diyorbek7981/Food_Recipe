@@ -23,6 +23,8 @@ ENV = dotenv_values(os.path.join(BASE_DIR, ".env"))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = ENV.get('SECRET_KEY')
+EMAIL = ENV.get('EMAIL')
+CODE = ENV.get('CODE')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -46,6 +48,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
     'userapp',
+    'foodapp',
     'drf_yasg',
     'rest_framework.authtoken',
     'corsheaders',

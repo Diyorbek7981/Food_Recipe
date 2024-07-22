@@ -8,6 +8,7 @@ from twilio.rest import Client
 from django.conf import settings
 import smtplib
 import vonage
+from config.settings import EMAIL, CODE
 
 # email yoki telefon raqamiga tekshiradi ------------------------>
 
@@ -63,7 +64,7 @@ def send_email(email, code):
     s.starttls()
     # Authentication
     # s.login('email', "password")
-    s.login('abdumalikovislombek39@gmail.com', "gexe vqkl cdjt wdaa")
+    s.login(EMAIL, CODE)
     # message to be sent
     subject = 'Salom do`stim! Sizning tasdiqlash kodingiz:'
     body = code
