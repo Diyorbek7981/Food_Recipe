@@ -36,6 +36,6 @@ class UserConfirmationAdmin(admin.ModelAdmin):
 
 
 @admin.register(DietaryModel)
-class DietaryModelAdmin(admin.ModelAdmin):
+class DietaryModelAdmin(TranslationAdmin, TaskAdmin):
     list_display = ['id', 'name']
     list_display_links = ['id', 'name']

@@ -17,7 +17,7 @@ class Recipes(BaseModel):
     image = models.ImageField(upload_to='image/recipe/')
     cook_time = models.IntegerField()
     serves = models.IntegerField()
-    views_number = models.ManyToManyField(Users, verbose_name="ViewsNumber")
+    views_number = models.ManyToManyField(Users, verbose_name="ViewsNumber", null=True, blank=True)
     location = models.CharField(max_length=100)
     author = models.ForeignKey(Users, related_name='recipe_owner', on_delete=models.CASCADE, verbose_name='Owner')
     category = models.ManyToManyField('Category', verbose_name='Categories')
@@ -70,7 +70,7 @@ class FoodComment(BaseModel):
 
 class FoodLike(models.Model):
     author = models.ForeignKey(Users, on_delete=models.CASCADE)
-    recipe = models.ForeignKey(Recipes, on_delete=models.CASCADE, related_name='recipe_likes')
+    recipe = models.ForeignKey('Recipes', on_delete=models.CASCADE, related_name='recipe_likes')
 
     # home.likes buyrugi berilsa shu homga tegishli barcha likelar keladi
 
@@ -79,7 +79,7 @@ class FoodLike(models.Model):
             UniqueConstraint(
                 fields=['author', 'recipe'],
                 # ko'rsatilgan author ko'rsatilgan postga 1 marta like bosadi (2 - sini qbulqilmaydi)
-                name='postLikeUnique'
+                name='foodLikeUnique'
             )
         ]
 
