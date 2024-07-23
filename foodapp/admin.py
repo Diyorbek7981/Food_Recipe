@@ -44,3 +44,9 @@ class FoodLikeAdmin(admin.ModelAdmin):
 class CommentLikeAdmin(admin.ModelAdmin):
     list_display = ['author', 'comment', ]
     list_display_links = ['author', 'comment', ]
+
+
+@admin.register(SaveModel)
+class SaveModelAdmin(admin.ModelAdmin):
+    list_display = ['author', 'recipe', ]
+    list_display_links = ['author', 'recipe', ]

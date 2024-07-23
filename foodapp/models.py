@@ -65,7 +65,7 @@ class FoodComment(BaseModel):
     )
 
     def __str__(self):
-        return f"comment by {self.author}"
+        return f"{self.comment[:20]} by {self.author}"
 
 
 class FoodLike(models.Model):
@@ -101,3 +101,19 @@ class CommentLike(BaseModel):
 
     def __str__(self):
         return f"{self.author} -- {self.comment}"
+
+
+class SaveModel(BaseModel):
+    author = models.ForeignKey(Users, on_delete=models.CASCADE)
+    recipe = models.ForeignKey(Recipes, on_delete=models.CASCADE, related_name='save')
+
+    class Meta:
+        constraints = [
+            UniqueConstraint(
+                fields=['author', 'recipe'],
+                name='SaveUnique'
+            )
+        ]
+
+    def __str__(self):
+        return f"{self.author} -- {self.recipe}"
