@@ -5,6 +5,7 @@ import uuid  # takrorlanishlar ehtimoli kam
 from django.core.validators import FileExtensionValidator, MaxLengthValidator
 from datetime import datetime, timedelta
 from rest_framework_simplejwt.tokens import RefreshToken
+from django.db.models import UniqueConstraint
 
 # Users uchun--------------------------------->
 
@@ -41,11 +42,9 @@ class Users(AbstractUser):
     bio = models.TextField(null=True, blank=True)
     gender = models.CharField(max_length=20, choices=GENDER_STATUS)
     date_of_birth = models.DateField(null=True, blank=True)
-    followers = models.ManyToManyField('self', related_name='followers', null=True, blank=True)
-    following = models.ManyToManyField('self', related_name='following', null=True, blank=True)
     cooking_level = models.CharField(max_length=50, null=True, blank=True)
     cuisines = models.ManyToManyField('CuisinesModel', related_name='cuisines', default=None)
-    dietary = models.ManyToManyField('DietaryModel', related_name='cuisines', default=None)
+    dietary = models.ManyToManyField('DietaryModel', related_name='dietary', default=None)
     instagram = models.URLField(null=True, blank=True)
     youtube = models.URLField(null=True, blank=True)
     telegram = models.URLField(null=True, blank=True)
@@ -171,3 +170,35 @@ class UserConfirmation(models.Model):
         else:
             self.expiration_time = datetime.now() + timedelta(minutes=PHONE_EXPIRE)
         super(UserConfirmation, self).save(*args, **kwargs)
+
+
+class FollowerModel(models.Model):
+    author = models.ForeignKey(Users, on_delete=models.CASCADE)
+    follower = models.ForeignKey(Users, on_delete=models.CASCADE, related_name='followers')
+
+    class Meta:
+        constraints = [
+            UniqueConstraint(
+                fields=['author', 'follower'],
+                name='followerUnique'
+            )
+        ]
+
+    def __str__(self):
+        return f"{self.author} -- {self.follower}"
+
+
+class FollowingModel(models.Model):
+    author = models.ForeignKey(Users, on_delete=models.CASCADE)
+    following = models.ForeignKey(Users, on_delete=models.CASCADE, related_name='following')
+
+    class Meta:
+        constraints = [
+            UniqueConstraint(
+                fields=['author', 'following'],
+                name='followingUnique'
+            )
+        ]
+
+    def __str__(self):
+        return f"{self.author} -- {self.following}"

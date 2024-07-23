@@ -17,7 +17,7 @@ class Recipes(BaseModel):
     image = models.ImageField(upload_to='image/recipe/')
     cook_time = models.IntegerField()
     serves = models.IntegerField()
-    views_number = models.ManyToManyField(Users, verbose_name="ViewsNumber", null=True, blank=True)
+    views_number = models.IntegerField(default=0)
     location = models.CharField(max_length=100)
     author = models.ForeignKey(Users, related_name='recipe_owner', on_delete=models.CASCADE, verbose_name='Owner')
     category = models.ManyToManyField('Category', verbose_name='Categories')
@@ -68,7 +68,7 @@ class FoodComment(BaseModel):
         return f"{self.comment[:20]} by {self.author}"
 
 
-class FoodLike(models.Model):
+class FoodLike(BaseModel):
     author = models.ForeignKey(Users, on_delete=models.CASCADE)
     recipe = models.ForeignKey('Recipes', on_delete=models.CASCADE, related_name='recipe_likes')
 

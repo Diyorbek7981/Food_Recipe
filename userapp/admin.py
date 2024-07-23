@@ -39,3 +39,15 @@ class UserConfirmationAdmin(admin.ModelAdmin):
 class DietaryModelAdmin(TranslationAdmin, TaskAdmin):
     list_display = ['id', 'name']
     list_display_links = ['id', 'name']
+
+
+@admin.register(FollowerModel)
+class FollowerModelAdmin(admin.ModelAdmin):
+    list_display = ['id', 'author', 'follower']
+    list_display_links = ['id', 'author', 'follower']
+
+
+@admin.register(FollowingModel)
+class FollowingModelAdmin(admin.ModelAdmin):
+    list_display = ['id', 'author', 'following']
+    list_display_links = ['id', 'author', 'following']
