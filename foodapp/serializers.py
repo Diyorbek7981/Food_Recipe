@@ -10,8 +10,66 @@ class UserSerializer(serializers.ModelSerializer):
         # shunga o'xshash serializer yana boshqa joyda bo'lsa ref_name qo'yiladi
 
 
+class RecipesSerializer(serializers.ModelSerializer):
+    author = UserSerializer(read_only=True)
+    recipe_likes_count = serializers.SerializerMethodField('get_recipe_likes_count')
+    recipe_comments_count = serializers.SerializerMethodField('get_recipe_comments_count')
+    me_liked = serializers.SerializerMethodField('get_me_liked')
+    me_saved = serializers.SerializerMethodField('get_me_saved')
+
+    class Meta:
+        model = Recipes
+        fields = (
+            "id",
+            "title",
+            "description",
+            'image',
+            "cook_time",
+            "serves",
+            "views_number",
+            "location",
+            "author",
+            "category",
+            'created_at',
+            "recipe_likes_count",
+            "recipe_comments_count",
+            "me_liked",
+            "me_saved",
+        )
+        extra_kwargs = {"image": {"required": False}}
+
+    def get_recipe_likes_count(self, obj):
+        return obj.recipe_likes.count()
+
+    def get_recipe_comments_count(self, obj):
+        return obj.recipe.count()
+
+    def get_me_liked(self, obj):
+        request = self.context.get('request', None)
+        if request and request.user.is_authenticated:
+            try:
+                like = FoodLike.objects.get(recipe=obj, author=request.user)
+                return True
+            except FoodLike.DoesNotExist:
+                return False
+
+        return False
+
+    def get_me_saved(self, obj):
+        request = self.context.get('request', None)
+        if request and request.user.is_authenticated:
+            try:
+                like = SaveModel.objects.get(recipe=obj, author=request.user)
+                return True
+            except SaveModel.DoesNotExist:
+                return False
+
+        return False
+
+
 class FoodLikeSerializer(serializers.ModelSerializer):
     author = UserSerializer(read_only=True)
+    recipe = RecipesSerializer(read_only=True)
 
     class Meta:
         model = FoodLike
@@ -20,6 +78,7 @@ class FoodLikeSerializer(serializers.ModelSerializer):
 
 class SaveSerializer(serializers.ModelSerializer):
     author = UserSerializer(read_only=True)
+    recipe = RecipesSerializer(read_only=True)
 
     class Meta:
         model = FoodLike
@@ -77,60 +136,3 @@ class CommentLikeSerializer(serializers.ModelSerializer):
     class Meta:
         model = CommentLike
         fields = ("id", "author", "comment")
-
-
-class RecipesSerializer(serializers.ModelSerializer):
-    author = UserSerializer(read_only=True)
-    recipe_likes_count = serializers.SerializerMethodField('get_recipe_likes_count')
-    recipe_comments_count = serializers.SerializerMethodField('get_recipe_comments_count')
-    me_liked = serializers.SerializerMethodField('get_me_liked')
-    me_saved = serializers.SerializerMethodField('get_me_saved')
-
-    class Meta:
-        model = Recipes
-        fields = (
-            "id",
-            "title",
-            "description",
-            'image',
-            "cook_time",
-            "serves",
-            "views_number",
-            "location",
-            "author",
-            "category",
-            'created_at',
-            "recipe_likes_count",
-            "recipe_comments_count",
-            "me_liked",
-            "me_saved",
-        )
-        extra_kwargs = {"image": {"required": False}}
-
-    def get_recipe_likes_count(self, obj):
-        return obj.recipe_likes.count()
-
-    def get_recipe_comments_count(self, obj):
-        return obj.recipe.count()
-
-    def get_me_liked(self, obj):
-        request = self.context.get('request', None)
-        if request and request.user.is_authenticated:
-            try:
-                like = FoodLike.objects.get(recipe=obj, author=request.user)
-                return True
-            except FoodLike.DoesNotExist:
-                return False
-
-        return False
-
-    def get_me_saved(self, obj):
-        request = self.context.get('request', None)
-        if request and request.user.is_authenticated:
-            try:
-                like = SaveModel.objects.get(recipe=obj, author=request.user)
-                return True
-            except SaveModel.DoesNotExist:
-                return False
-
-        return False
