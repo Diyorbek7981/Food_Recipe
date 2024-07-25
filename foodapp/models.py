@@ -26,16 +26,6 @@ class Recipes(BaseModel):
         return self.title
 
 
-class Instructions(BaseModel):
-    recipe = models.ForeignKey(Recipes, on_delete=models.CASCADE)
-    text = models.TextField()
-    image_1 = models.ImageField(upload_to='media/instructions/')
-    image_2 = models.ImageField(upload_to='media/instructions/')
-    image_3 = models.ImageField(upload_to='media/instructions/')
-
-    def __str__(self):
-        return self.text[:20]
-
 
 class Ingredients(BaseModel):
     recipe = models.ForeignKey(Recipes, on_delete=models.CASCADE)

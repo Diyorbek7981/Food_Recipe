@@ -1,22 +1,28 @@
-from django.shortcuts import render
-from .serializers import *
-from foodapp.models import *
-from django.views import generic
+from rest_framework import generics
+from .models import Instructions
+from .serializers import InstructionSerializer
 
 
-class InstructionsView(generic.ListView):
-    model = Instructions
-    serializer_class = InstructionsSerializer
-    context_object_name = 'instructions'
-
-    def get_queryset(self):
-        return Instructions.objects.all()
+class InstructionCreate(generics.CreateAPIView):
+    queryset = Instructions.objects.all()
+    serializer_class = InstructionSerializer
 
 
-class CreateInstructionsView(generic.edit.CreateView):
-    model = Instructions
-    serializer_class = InstructionsSerializer
+class InstructionList(generics.ListAPIView):
+    queryset = Instructions.objects.all()
+    serializer_class = InstructionSerializer
 
-    def form_valid(self, form):
-        form.instance.user = self.request.user
-        form.instance.save()
+
+class InstructionDetail(generics.RetrieveAPIView):
+    queryset = Instructions.objects.all()
+    serializer_class = InstructionSerializer
+
+
+class InstructionUpdate(generics.UpdateAPIView):
+    queryset = Instructions.objects.all()
+    serializer_class = InstructionSerializer
+
+
+class InstructionDelete(generics.DestroyAPIView):
+    queryset = Instructions.objects.all()
+    serializer_class = InstructionSerializer

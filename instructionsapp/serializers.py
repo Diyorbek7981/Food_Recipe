@@ -1,10 +1,8 @@
 from rest_framework import serializers
+from .models import Instructions
 
-from foodapp.models import *
 
-
-class InstructionsSerializer(serializers.ModelSerializer):
+class InstructionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Instructions
-        fields = '__all__'
-
+        fields = ['id', 'recipe', 'text', 'image_1', 'image_2', 'image_3']
