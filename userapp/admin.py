@@ -19,14 +19,15 @@ class TaskAdmin():
 
 
 @admin.register(CuisinesModel)
-class HomeModelAdmin(TranslationAdmin, TaskAdmin):
+class CuisinesModelAdmin(TranslationAdmin, TaskAdmin):
     list_display = ['name']
     list_display_links = ['name']
 
 
 @admin.register(Users)
-class UserAdmin(admin.ModelAdmin):
-    list_display = ['username']
+class UsersAdmin(admin.ModelAdmin):
+    list_display = ['id', 'username']
+    list_display_links = ['id', 'username']
 
 
 @admin.register(UserConfirmation)

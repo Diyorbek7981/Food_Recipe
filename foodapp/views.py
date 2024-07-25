@@ -106,9 +106,9 @@ class FoodCommentCreateView(generics.CreateAPIView):  # coment create retsept id
 
 
 class CommentUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):  # coment uchun update delete retrive(detail)
+    queryset = FoodComment.objects.all()
     serializer_class = CommentSerializer
     permission_classes = [permissions.AllowAny, ]
-    queryset = FoodComment.objects.all()
 
 
 class CommentLikeListView(generics.ListAPIView):
@@ -147,7 +147,7 @@ class CommentLikeAPiView(APIView):  # coment like create delete
             return Response(data, status=status.HTTP_201_CREATED)
 
 
-class RecipeListView(generics.ListAPIView):
+class RecipeListView(generics.ListAPIView):  # recept list uchun
     queryset = Recipes.objects.all()
     serializer_class = RecipesSerializer
     permission_classes = [permissions.AllowAny, ]
