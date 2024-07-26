@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'userapp',
     'categoryapp',
     'ingredientsapp',
+    'recipesapp',
     'foodapp',
     'drf_yasg',
     'rest_framework.authtoken',

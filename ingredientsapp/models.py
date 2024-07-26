@@ -1,6 +1,6 @@
 from django.db import models
 
-from foodapp.models import Recipes
+from recipesapp.models import Recipes
 
 
 class BaseModel(models.Model):

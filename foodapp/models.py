@@ -1,6 +1,7 @@
 from django.db import models
-from django.conf import settings
 from django.db.models import UniqueConstraint
+
+from recipesapp.models import Recipes
 from userapp.models import Users
 from categoryapp.models import Category
 
@@ -9,21 +10,6 @@ class BaseModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(auto_now_add=True)
-
-
-class Recipes(BaseModel):
-    title = models.CharField(max_length=100)
-    description = models.TextField()
-    image = models.ImageField(upload_to='image/recipe/')
-    cook_time = models.IntegerField()
-    serves = models.IntegerField()
-    views_number = models.ManyToManyField(Users, verbose_name="ViewsNumber", null=True, blank=True)
-    location = models.CharField(max_length=100)
-    author = models.ForeignKey(Users, related_name='recipe_owner', on_delete=models.CASCADE, verbose_name='Owner')
-    category = models.ManyToManyField(Category, verbose_name='Categories')
-
-    def __str__(self):
-        return self.title
 
 
 class FoodComment(BaseModel):
@@ -44,7 +30,7 @@ class FoodComment(BaseModel):
 
 class FoodLike(models.Model):
     author = models.ForeignKey(Users, on_delete=models.CASCADE)
-    recipe = models.ForeignKey('Recipes', on_delete=models.CASCADE, related_name='recipe_likes')
+    recipe = models.ForeignKey(Recipes, on_delete=models.CASCADE, related_name='recipe_likes')
 
     # home.likes buyrugi berilsa shu homga tegishli barcha likelar keladi
 

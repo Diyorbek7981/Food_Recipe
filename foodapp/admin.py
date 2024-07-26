@@ -4,11 +4,6 @@ from .models import *
 
 # Register your models here.
 
-@admin.register(Recipes)
-class RecipesAdmin(admin.ModelAdmin):
-    list_display = ['title', 'author', 'location']
-    list_display_links = ['title', 'author', 'location']
-
 
 @admin.register(FoodComment)
 class FoodCommentAdmin(admin.ModelAdmin):
