@@ -4,6 +4,7 @@ from django.db.models import UniqueConstraint
 from userapp.models import Users
 from categoryapp.models import Category
 
+
 class BaseModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -23,15 +24,6 @@ class Recipes(BaseModel):
 
     def __str__(self):
         return self.title
-
-
-class Ingredients(BaseModel):
-    recipe = models.ForeignKey(Recipes, on_delete=models.CASCADE)
-    text = models.TextField()
-
-    def __str__(self):
-        return self.text[:20]
-
 
 
 class FoodComment(BaseModel):
