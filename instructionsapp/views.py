@@ -1,10 +1,13 @@
 from rest_framework import generics
+from rest_framework.parsers import FormParser, MultiPartParser
+
 from .models import Instructions
 from .serializers import InstructionSerializer
 
 
 class InstructionCreate(generics.CreateAPIView):
     queryset = Instructions.objects.all()
+    parser_classes = (FormParser, MultiPartParser)
     serializer_class = InstructionSerializer
 
 

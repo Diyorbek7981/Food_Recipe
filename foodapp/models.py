@@ -26,7 +26,6 @@ class Recipes(BaseModel):
         return self.title
 
 
-
 class Ingredients(BaseModel):
     recipe = models.ForeignKey(Recipes, on_delete=models.CASCADE)
     text = models.TextField()

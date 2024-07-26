@@ -10,6 +10,7 @@ class RecipesAdmin(admin.ModelAdmin):
     list_display_links = ['title', 'author', 'location']
 
 
+
 @admin.register(Ingredients)
 class IngredientsAdmin(admin.ModelAdmin):
     list_display = ['recipe', 'text']
