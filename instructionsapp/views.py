@@ -23,6 +23,7 @@ class InstructionDetail(generics.RetrieveAPIView):
 
 class InstructionUpdate(generics.UpdateAPIView):
     queryset = Instructions.objects.all()
+    parser_classes = (FormParser, MultiPartParser)
     serializer_class = InstructionSerializer
 
 
