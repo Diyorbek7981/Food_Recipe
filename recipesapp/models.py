@@ -1,31 +1,7 @@
 from django.db import models
 from django.conf import settings
+
 User = settings.AUTH_USER_MODEL
-
-class Instructions(models.Model):
-    recipe = models.ForeignKey('recipesapp.Recipes', on_delete=models.CASCADE)
-    text = models.TextField()
-    image_1 = models.ImageField(upload_to='instructions/')
-    image_2 = models.ImageField(upload_to='instructions/')
-    image_3 = models.ImageField(upload_to='instructions/')
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateTimeField(auto_now_add=True)
-
-
-class Ingredients(models.Model):
-    recipe = models.ForeignKey('recipesapp.Recipes', on_delete=models.CASCADE)
-    text = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateTimeField(auto_now_add=True)
-
-
-class Category(models.Model):
-    category_name = models.CharField(max_length=50)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateTimeField(auto_now_add=True)
 
 
 class Recipes(models.Model):

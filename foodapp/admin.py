@@ -10,19 +10,6 @@ class RecipesAdmin(admin.ModelAdmin):
     list_display_links = ['title', 'author', 'location']
 
 
-
-@admin.register(Ingredients)
-class IngredientsAdmin(admin.ModelAdmin):
-    list_display = ['recipe', 'text']
-    list_display_links = ['recipe', 'text']
-
-
-@admin.register(Category)
-class CategoryAdmin(admin.ModelAdmin):
-    list_display = ['category_name']
-    list_display_links = ['category_name']
-
-
 @admin.register(FoodComment)
 class FoodCommentAdmin(admin.ModelAdmin):
     list_display = ['author', 'recipe', ]

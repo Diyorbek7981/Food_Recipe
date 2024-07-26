@@ -1,9 +1,8 @@
 from django.db import models
-from django.db import models
 from django.conf import settings
 from django.db.models import UniqueConstraint
 from userapp.models import Users
-
+from categoryapp.models import Category
 
 class BaseModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
@@ -20,7 +19,7 @@ class Recipes(BaseModel):
     views_number = models.ManyToManyField(Users, verbose_name="ViewsNumber", null=True, blank=True)
     location = models.CharField(max_length=100)
     author = models.ForeignKey(Users, related_name='recipe_owner', on_delete=models.CASCADE, verbose_name='Owner')
-    category = models.ManyToManyField('Category', verbose_name='Categories')
+    category = models.ManyToManyField(Category, verbose_name='Categories')
 
     def __str__(self):
         return self.title
@@ -33,12 +32,6 @@ class Ingredients(BaseModel):
     def __str__(self):
         return self.text[:20]
 
-
-class Category(BaseModel):
-    category_name = models.CharField(max_length=50)
-
-    def __str__(self):
-        return self.category_name
 
 
 class FoodComment(BaseModel):
