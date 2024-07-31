@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
     'userapp',
     'foodapp',
+    'recipesapp',
     'drf_yasg',
     'rest_framework.authtoken',
     'corsheaders',
