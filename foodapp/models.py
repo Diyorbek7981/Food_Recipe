@@ -3,7 +3,7 @@ from django.db.models import UniqueConstraint
 
 from recipesapp.models import Recipes
 from userapp.models import Users
-from categoryapp.models import Category
+from recipesapp.models import Category
 
 
 class BaseModel(models.Model):

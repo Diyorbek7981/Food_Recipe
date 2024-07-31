@@ -21,10 +21,7 @@ urlpatterns = [
 
     path('admin/', admin.site.urls),
     path('use/', include('userapp.urls')),
-    path('instructions/', include('instructionsapp.urls')),
     path('food/', include('foodapp.urls')),
-    path('category/', include('categoryapp.urls')),
-    path('ingredients/', include('ingredientsapp.urls')),
     path('recipes/', include('recipesapp.urls')),
     path('swagger<format>/', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
